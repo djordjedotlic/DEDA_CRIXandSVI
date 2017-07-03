@@ -6,13 +6,18 @@ if(!require("forecast")) install.packages("forecast");library("forecast")
 if(!require("lmtest")) install.packages("lmtest");library("lmtest")
 if(!require("ggplot2")) install.packages("ggplot2");library("ggplot2")
 if(!require("tseries")) install.packages("tseries");library("tseries")
-if(!require("stargazer")) install.packages("stargazer");library("stargazer")
 
 
 #Loading the data----
 input <- read.csv("data/df.csv", header = TRUE, sep = ",")
 input$date <- as.Date(input$date, "%m/%d/%Y")
 input$X.1 <- NULL
+
+ggplot( data = input, aes( date, svi )) + geom_line() 
+ggplot( data = input, aes( date, crix )) + geom_line() 
+ggplot( data = input, aes( date, returns )) + geom_line() 
+
+
 
 
 #Detecting structural breaks in the time series----
@@ -127,6 +132,9 @@ input$crix <- NULL
 input$svi <- log(input$svi)
 input$volume <- log(input$volume)
 input$epuix <- log(input$epuix)
+colnames(input)[3:9] <- c("log(svi)","log_returns", "log_sp500_returns",
+                     "log(vix)", "log(volume)", "volatility", "log(epuix)")
+
 input_1 <- input[1:91,]
 input_2 <- input[92:124,]
 input_3 <- input[125:146,]
@@ -136,6 +144,9 @@ input_list[[2]] <- input_2
 input_list[[3]] <- input_3
 
 pred_input <- read.csv("data/pred_df.csv", header = TRUE, sep = ",")
+colnames(pred_input)[3:9] <- c("log(svi)","log_returns", "log_sp500_returns",
+                               "log(vix)", "log(volume)", "volatility", "log(epuix)")
+
 pred_input_1 <- pred_input[1:91,]
 pred_input_2 <- pred_input[92:124,]
 pred_input_3 <- pred_input[125:146,]
@@ -153,14 +164,12 @@ for(i in 1:3){
   input <- input_list[[i]]
   pred_input <- pred_input_list[[i]]
   #Contempraneous regression
-  cont_reg <- lm(returns~., data = input[,-(1:2)])
+  cont_reg <- lm(log_returns~., data = input[,-(1:2)])
   cont_reg_list[[i]] <- cont_reg
   bp_cont[[i]] <- bptest(cont_reg)
   #Predictive regression
-  pred_reg <- lm(returns~., data = pred_input[,-(1:2)])
+  pred_reg <- lm(log_returns~., data = pred_input[,-(1:2)])
   pred_reg_list[[i]] <- pred_reg
   bp_pred[[i]] <- bptest(pred_reg)
   
 }
-
-
