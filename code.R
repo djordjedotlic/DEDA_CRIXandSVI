@@ -13,9 +13,12 @@ input <- read.csv("data/df.csv", header = TRUE, sep = ",")
 input$date <- as.Date(input$date, "%m/%d/%Y")
 input$X.1 <- NULL
 
-ggplot( data = input, aes( date, svi )) + geom_line() 
-ggplot( data = input, aes( date, crix )) + geom_line() 
-ggplot( data = input, aes( date, returns )) + geom_line() 
+ggplot( data = input, aes( date, svi )) + geom_line() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+                                                              panel.background = element_blank(), axis.line = element_line(colour = "black"))
+ggplot( data = input, aes( date, crix )) + geom_line() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+                                                               panel.background = element_blank(), axis.line = element_line(colour = "black"))
+ggplot( data = input, aes( date, returns )) + geom_line() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+                                                                  panel.background = element_blank(), axis.line = element_line(colour = "black"))
 
 
 
@@ -49,7 +52,8 @@ bp_date_crix[1] <- input$date[c[1]]
 bp_date_crix[1] <- as.Date(bp_date_crix[1], format = "%Y-%m-%d")
 bp_date_crix[2] <- input$date[c[2]]
 bp_date_crix[2] <- as.Date(bp_date_crix[2], format = "%Y-%m-%d")
-ggplot( data = input, aes( date, crix )) + geom_line() + geom_vline(xintercept = c(bp_date_crix))
+ggplot( data = input, aes( date, crix )) + geom_line() + geom_vline(xintercept = c(bp_date_crix))+ theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+                                                                                                         panel.background = element_blank(), axis.line = element_line(colour = "black"))
 
 
 
@@ -58,7 +62,8 @@ bp_date[1] <- input$date[p[1]]
 bp_date[1] <- as.Date(bp_date[1], format = "%Y-%m-%d")
 bp_date[2] <- input$date[p[2]]
 bp_date[2] <- as.Date(bp_date[2], format = "%Y-%m-%d")
-ggplot( data = input, aes( date, svi )) + geom_line() + geom_vline(xintercept = c(bp_date))
+ggplot( data = input, aes( date, svi )) + geom_line() + geom_vline(xintercept = c(bp_date))+ theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+                                                                                                   panel.background = element_blank(), axis.line = element_line(colour = "black"))
 
 
 input$crix <- NULL
